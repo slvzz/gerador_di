@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor de Formulários</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script defer src="script.js"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .editor-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+    #editor, #preview {
+      width: 800px;
+      max-width: 100%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background-color: #fff;
+      border-radius: 10px;
+    }
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .option-input {
+      display: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- header -->
+  <header class="bg-primary text-white text-center py-3">
+    <h1>Trabalho 1</h1>
+  </header>
+
+  <div class="editor-container">
+    <!-- area do criador de form -->
+    <div id="editor" class="p-4">
+      <h3>Monte seu formulário</h3>
+      <p class="text-muted">Selecione o que gostaria de ter no formulário:</p>
+
+      <div class="form-control-editor">
+        <label for="formTitle">Título do Formulário:</label>
+        <input type="text" id="formTitle" class="form-control">
+      </div>
+
+      <div class="form-control-editor">
+        <label for="formBgColor">Cor de Fundo do Formulário:</label>
+        <input type="color" id="formBgColor" class="form-control form-control-color">
+      </div>
+
+      <div class="form-control-editor">
+        <label for="formBorderColor">Cor da Borda do Formulário:</label>
+        <input type="color" id="formBorderColor" class="form-control form-control-color">
+      </div>
+
+      <hr>
+
+      <h5>Adicionar Campo</h5>
+      <div class="form-control-editor">
+        <label for="fieldLabel">Texto do Label:</label>
+        <input type="text" id="fieldLabel" class="form-control">
+      </div>
+
+      <div class="form-control-editor">
+        <label for="fieldType">Tipo de Campo:</label>
+        <select id="fieldType" class="form-select">
+          <option value="text">Texto</option>
+          <option value="email">Email</option>
+          <option value="date">Data</option>
+          <option value="radio">Escolha (Radio)</option>
+          <option value="select">Seleção (Select)</option>
+        </select>
+      </div>
+
+      <div class="form-control-editor option-input" id="optionInputs">
+        <label for="fieldOptions">Opções (separadas por vírgula):</label>
+        <input type="text" id="fieldOptions" class="form-control" placeholder="Ex: Azul, Verde, Vermelho">
+      </div>
+
+      <button id="addFieldBtn" type="button" class="btn btn-primary mt-2">Adicionar Campo</button>
+    </div>
+
+    <!-- vista do formulário -->
+    <div id="preview" class="p-4">
+      <form id="generatedForm">
+        <!-- gera o formulário -->
+      </form>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <footer class="bg-light text-center py-3 mt-4">
+    <p class="mb-0">Silvio Rizzo - 2025</p>
+  </footer>
+</body>
+</html>

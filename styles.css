@@ -1,0 +1,108 @@
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f6f9;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* container principal */
+  .editor-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 30px 20px 60px;
+    flex-wrap: wrap;
+  }
+  
+  /* estilo dos blocos editor/visualizacao */
+  #editor, #preview {
+    width: 500px;
+    max-width: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+  }
+  
+  /* estilo header */
+  header {
+    background: #0d6efd;
+    color: white;
+    text-align: center;
+    padding: 16px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  header h1 {
+    margin: 0;
+    font-size: 28px;
+  }
+  
+  /* titulos e subtitulos */
+  #editor h3,
+  #editor h5 {
+    color: #333;
+  }
+  
+  .text-muted {
+    font-size: 0.9rem;
+    color: #666 !important;
+  }
+  
+  /* inputs e labels organizados */
+  .form-control-editor {
+    margin-bottom: 16px;
+  }
+  
+  .form-control,
+  .form-select {
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  /* (radio/select) */
+  .option-input {
+    display: none;
+    margin-top: 10px;
+  }
+  
+  /* botao add */
+  #addFieldBtn {
+    width: 100%;
+    font-weight: 600;
+  }
+  
+  /* formulário gerado */
+  #generatedForm {
+    background: #f9f9f9;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  
+  #formTitlePreview {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* footer */
+  footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #eaeaea;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 14px;
+    color: #444;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
