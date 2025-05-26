@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editor de Formulários</title>
+  <title>Editor de Páginas HTML</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <script defer src="script.js"></script>
   <style>
     body, html {
@@ -24,88 +25,296 @@
       flex-wrap: wrap;
     }
     #editor, #preview {
-      width: 800px;
+      width: 800px; /* Ajuste para o editor */
       max-width: 100%;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       background-color: #fff;
       border-radius: 10px;
     }
-    footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
+    #preview {
+        min-height: 400px; /* Garante que a pré-visualização tenha uma altura mínima */
+        width: 800px; /* Ajuste para a pré-visualização */
+        padding: 0 !important; /* Reseta o padding padrão da div #preview */
     }
     .option-input {
       display: none;
       margin-top: 10px;
     }
+    .preview-section {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+    }
+    /* Estilos para o cabeçalho e rodapé principais */
+    header, footer {
+        color: white; /* Cor padrão para o texto do header */
+        text-align: center; /* ALINHAMENTO PADRÃO */
+        padding: 16px 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    /* Nova div para o conteúdo do header */
+    #headerContent {
+        display: flex;
+        align-items: center; /* Alinha itens verticalmente */
+        justify-content: center; /* ALINHAMENTO PADRÃO */
+        gap: 10px; /* Espaçamento entre a imagem e o título */
+        width: fit-content; /* Para que o flexbox se ajuste ao conteúdo */
+        margin: 0 auto; /* Centraliza a div no header */
+    }
+    header h1 {
+        margin: 0;
+        font-size: 28px;
+    }
+    header img {
+        max-width: 150px;
+        max-height: 100px;
+        object-fit: contain;
+        display: none; /* Inicia escondido */
+    }
+    footer {
+        color: #444; /* Cor padrão para o texto do footer */
+        font-size: 14px;
+        padding: 12px 0;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+        text-align: center; /* ALINHAMENTO PADRÃO */
+        width: 100%;
+    }
+
+    .gallery-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .gallery-card img {
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+    .menu-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+        padding: 5px;
+        border: 1px dashed #ccc;
+    }
+    #generatedHtmlOutput {
+        width: 100%;
+        height: 300px;
+        margin-top: 20px;
+        font-family: monospace;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+    }
   </style>
 </head>
 <body>
-  <!-- header -->
-  <header class="bg-primary text-white text-center py-3">
-    <h1>Trabalho 1</h1>
+  <header id="mainHeader" class="text-white py-3" style="background-color: #0d6efd;">
+    <div id="headerContent">
+        <img id="headerImageActual" src="" alt="Header Image">
+        <h1 id="headerTitleActual">Trabalho 1</h1>
+    </div>
   </header>
 
   <div class="editor-container">
-    <!-- area do criador de form -->
     <div id="editor" class="p-4">
-      <h3>Monte seu formulário</h3>
-      <p class="text-muted">Selecione o que gostaria de ter no formulário:</p>
+      <h3>Monte sua Página HTML</h3>
+      <p class="text-muted">Selecione o que gostaria de editar:</p>
 
-      <div class="form-control-editor">
-        <label for="formTitle">Título do Formulário:</label>
-        <input type="text" id="formTitle" class="form-control">
+      <ul class="nav nav-tabs mb-3" id="editorTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="header-tab" data-bs-toggle="tab" data-bs-target="#headerEditorContent" type="button" role="tab" aria-controls="headerEditorContent" aria-selected="true">Cabeçalho</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="menu-tab" data-bs-toggle="tab" data-bs-target="#menuEditorContent" type="button" role="tab" aria-controls="menuEditorContent" aria-selected="false">Menu</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#galleryEditorContent" type="button" role="tab" aria-controls="galleryEditorContent" aria-selected="false">Galeria</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="form-tab" data-bs-toggle="tab" data-bs-target="#formEditorContent" type="button" role="tab" aria-controls="formEditorContent" aria-selected="false">Formulário</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="footer-tab" data-bs-toggle="tab" data-bs-target="#footerEditorContent" type="button" role="tab" aria-controls="footerEditorContent" aria-selected="false">Rodapé</button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="editorTabContent">
+        <div class="tab-pane fade show active" id="headerEditorContent" role="tabpanel" aria-labelledby="header-tab">
+          <h5>Editar Cabeçalho</h5>
+          <div class="form-control-editor">
+            <label for="headerTitle">Título do Cabeçalho:</label>
+            <input type="text" id="headerTitle" class="form-control" value="Trabalho 1">
+          </div>
+          <div class="form-control-editor">
+            <label for="headerBgColor">Cor de Fundo:</label>
+            <input type="color" id="headerBgColor" class="form-control form-control-color" value="#0d6efd">
+          </div>
+          <div class="form-control-editor">
+            <label for="headerTextColor">Cor do Texto:</label>
+            <input type="color" id="headerTextColor" class="form-control form-control-color" value="#ffffff">
+          </div>
+          <div class="form-control-editor">
+            <label for="headerFontSize">Tamanho da Fonte (px):</label>
+            <input type="number" id="headerFontSize" class="form-control" value="28" min="10">
+          </div>
+          <div class="form-control-editor">
+            <label for="headerImage">URL da Imagem (Logo/Banner):</label>
+            <input type="text" id="headerImage" class="form-control" placeholder="http://example.com/image.png">
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="menuEditorContent" role="tabpanel" aria-labelledby="menu-tab">
+          <h5>Editar Menu</h5>
+          <div class="form-control-editor">
+            <label for="menuBgColor">Cor de Fundo do Menu:</label>
+            <input type="color" id="menuBgColor" class="form-control form-control-color" value="#f8f9fa">
+          </div>
+          <div class="form-control-editor">
+            <label for="menuItemTextColor">Cor do Texto dos Itens:</label>
+            <input type="color" id="menuItemTextColor" class="form-control form-control-color" value="#000000">
+          </div>
+          <hr>
+          <h6>Adicionar Item de Menu</h6>
+          <div class="form-control-editor">
+            <label for="menuItemText">Texto do Item:</label>
+            <input type="text" id="menuItemText" class="form-control">
+          </div>
+          <div class="form-control-editor">
+            <label for="menuItemUrl">URL do Item:</label>
+            <input type="text" id="menuItemUrl" class="form-control" value="#">
+          </div>
+          <button id="addMenuItemBtn" type="button" class="btn btn-primary mt-2">Adicionar Item</button>
+          <div id="menuItemsContainer" class="mt-3">
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="galleryEditorContent" role="tabpanel" aria-labelledby="gallery-tab">
+            <h5>Editar Galeria</h5>
+            <div class="form-control-editor">
+                <label for="galleryBgColor">Cor de Fundo da Galeria:</label>
+                <input type="color" id="galleryBgColor" class="form-control form-control-color" value="#ffffff">
+            </div>
+            <hr>
+            <h6>Adicionar Card de Galeria</h6>
+            <div class="form-control-editor">
+                <label for="galleryImageUrl">URL da Imagem:</label>
+                <input type="text" id="galleryImageUrl" class="form-control" placeholder="http://example.com/image.png">
+            </div>
+            <div class="form-control-editor">
+                <label for="galleryCardTitle">Título do Card:</label>
+                <input type="text" id="galleryCardTitle" class="form-control">
+            </div>
+            <div class="form-control-editor">
+                <label for="galleryCardDescription">Descrição do Card:</label>
+                <textarea id="galleryCardDescription" class="form-control" rows="3"></textarea>
+            </div>
+            <button id="addGalleryCardBtn" type="button" class="btn btn-primary mt-2">Adicionar Card</button>
+            <div id="galleryCardsContainer" class="mt-3">
+                </div>
+        </div>
+
+
+        <div class="tab-pane fade" id="formEditorContent" role="tabpanel" aria-labelledby="form-tab">
+            <h5>Monte seu formulário</h5>
+            <p class="text-muted">Selecione o que gostaria de ter no formulário:</p>
+
+            <div class="form-control-editor">
+                <label for="formTitle">Título do Formulário:</label>
+                <input type="text" id="formTitle" class="form-control">
+            </div>
+
+            <div class="form-control-editor">
+                <label for="formBgColor">Cor de Fundo do Formulário:</label>
+                <input type="color" id="formBgColor" class="form-control form-control-color">
+            </div>
+
+            <div class="form-control-editor">
+                <label for="formBorderColor">Cor da Borda do Formulário:</label>
+                <input type="color" id="formBorderColor" class="form-control form-control-color">
+            </div>
+
+            <hr>
+
+            <h5>Adicionar Campo</h5>
+            <div class="form-control-editor">
+                <label for="fieldLabel">Texto do Label:</label>
+                <input type="text" id="fieldLabel" class="form-control">
+            </div>
+
+            <div class="form-control-editor">
+                <label for="fieldType">Tipo de Campo:</label>
+                <select id="fieldType" class="form-select">
+                    <option value="text">Texto</option>
+                    <option value="email">Email</option>
+                    <option value="date">Data</option>
+                    <option value="radio">Escolha (Radio)</option>
+                    <option value="select">Seleção (Select)</option>
+                </select>
+            </div>
+
+            <div class="form-control-editor option-input" id="optionInputs">
+                <label for="fieldOptions">Opções (separadas por vírgula):</label>
+                <input type="text" id="fieldOptions" class="form-control" placeholder="Ex: Azul, Verde, Vermelho">
+            </div>
+
+            <button id="addFieldBtn" type="button" class="btn btn-primary mt-2">Adicionar Campo</button>
+        </div>
+
+        <div class="tab-pane fade" id="footerEditorContent" role="tabpanel" aria-labelledby="footer-tab">
+          <h5>Editar Rodapé</h5>
+          <div class="form-control-editor">
+            <label for="footerText">Texto do Rodapé:</label>
+            <input type="text" id="footerText" class="form-control" value="Silvio Rizzo - 2025">
+          </div>
+          <div class="form-control-editor">
+            <label for="footerBgColor">Cor de Fundo:</label>
+            <input type="color" id="footerBgColor" class="form-control form-control-color" value="#eaeaea">
+          </div>
+          <div class="form-control-editor">
+            <label for="footerTextColor">Cor do Texto:</label>
+            <input type="color" id="footerTextColor" class="form-control form-control-color" value="#444444">
+          </div>
+          </div>
       </div>
-
-      <div class="form-control-editor">
-        <label for="formBgColor">Cor de Fundo do Formulário:</label>
-        <input type="color" id="formBgColor" class="form-control form-control-color">
-      </div>
-
-      <div class="form-control-editor">
-        <label for="formBorderColor">Cor da Borda do Formulário:</label>
-        <input type="color" id="formBorderColor" class="form-control form-control-color">
-      </div>
-
-      <hr>
-
-      <h5>Adicionar Campo</h5>
-      <div class="form-control-editor">
-        <label for="fieldLabel">Texto do Label:</label>
-        <input type="text" id="fieldLabel" class="form-control">
-      </div>
-
-      <div class="form-control-editor">
-        <label for="fieldType">Tipo de Campo:</label>
-        <select id="fieldType" class="form-select">
-          <option value="text">Texto</option>
-          <option value="email">Email</option>
-          <option value="date">Data</option>
-          <option value="radio">Escolha (Radio)</option>
-          <option value="select">Seleção (Select)</option>
-        </select>
-      </div>
-
-      <div class="form-control-editor option-input" id="optionInputs">
-        <label for="fieldOptions">Opções (separadas por vírgula):</label>
-        <input type="text" id="fieldOptions" class="form-control" placeholder="Ex: Azul, Verde, Vermelho">
-      </div>
-
-      <button id="addFieldBtn" type="button" class="btn btn-primary mt-2">Adicionar Campo</button>
     </div>
 
-    <!-- vista do formulário -->
-    <div id="preview" class="p-4">
-      <form id="generatedForm">
-        <!-- gera o formulário -->
-      </form>
+    <div id="preview">
+        <nav id="menuPreview" class="preview-section" style="background-color: #f8f9fa;">
+            <ul id="menuList" class="nav justify-content-center">
+                </ul>
+        </nav>
+        <div id="galleryPreview" class="preview-section" style="background-color: #ffffff;">
+            <h4>Galeria</h4>
+            <div id="galleryCardsPreviewContainer" class="d-flex flex-wrap gap-3 justify-content-center">
+                </div>
+        </div>
+        <form id="generatedForm" class="preview-section">
+            </form>
     </div>
   </div>
 
-  <!-- footer -->
-  <footer class="bg-light text-center py-3 mt-4">
-    <p class="mb-0">Silvio Rizzo - 2025</p>
+  <div class="container my-4">
+    <div class="d-flex justify-content-center gap-2">
+      <button id="showHtmlBtn" class="btn btn-info">Ver HTML Gerado</button>
+      <button id="saveHtmlBtn" class="btn btn-success">Salvar HTML</button>
+      <button id="loadHtmlBtn" class="btn btn-warning">Carregar HTML</button>
+      <button id="clearLocalStorageBtn" class="btn btn-danger">Limpar LocalStorage</button>
+    </div>
+    <textarea id="generatedHtmlOutput" class="form-control mt-3" readonly></textarea>
+  </div>
+
+  <footer id="mainFooter" class="text-center py-3 mt-4" style="background-color: #eaeaea;">
+    <p id="footerTextActual" class="mb-0">Silvio Rizzo - 2025</p>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
